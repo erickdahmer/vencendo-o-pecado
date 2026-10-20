@@ -84,11 +84,11 @@
 
     <div id="app" class="relative z-10 max-w-md mx-auto p-4 md:p-6 pb-28 min-h-screen flex flex-col justify-between">
 
-        <div class="space-y-6">
+        <div class="space-y-5">
             <!-- CABEÇALHO LUME -->
-            <header class="text-center space-y-3 pt-4">
-                <div class="inline-flex items-center justify-center w-24 h-24 rounded-3xl app-icon-glass shadow-2xl relative overflow-hidden my-1">
-                    <svg class="w-14 h-14 drop-shadow-[0_0_12px_rgba(234,179,8,0.7)]" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <header class="text-center space-y-3 pt-2">
+                <div class="inline-flex items-center justify-center w-20 h-20 rounded-3xl app-icon-glass shadow-2xl relative overflow-hidden my-1">
+                    <svg class="w-12 h-12 drop-shadow-[0_0_12px_rgba(234,179,8,0.7)]" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <defs>
                             <linearGradient id="lume-gold-grad" x1="10" y1="10" x2="90" y2="90" gradientUnits="userSpaceOnUse">
                                 <stop offset="0%" stop-color="#FEF08A"/>
@@ -115,24 +115,24 @@
             </header>
 
             <!-- ABA 1: INÍCIO / HOME -->
-            <div v-show="abaAtiva === 'home'" class="space-y-5">
+            <div v-show="abaAtiva === 'home'" class="space-y-4">
                 <!-- CONTADOR DE DIAS -->
-                <div class="card-glass p-7 rounded-3xl text-center space-y-3 relative overflow-hidden">
+                <div class="card-glass p-6 rounded-3xl text-center space-y-3 relative overflow-hidden">
                     <span class="text-[11px] text-slate-400 font-semibold uppercase tracking-widest">TEMPO DE CAMINHADA NA LUZ</span>
                     
                     <div class="flex justify-center items-baseline gap-2">
-                        <span class="text-7xl font-extrabold text-white tracking-tighter">{{ diasDeVitoria }}</span>
+                        <span class="text-6xl font-extrabold text-white tracking-tighter">{{ diasDeVitoria }}</span>
                         <span class="text-lg font-bold text-slate-300">dias</span>
                     </div>
 
-                    <p class="text-xs text-emerald-300 font-medium bg-emerald-950/60 py-2 px-4 rounded-full border border-emerald-500/30 inline-block shadow-inner">
+                    <p class="text-xs text-emerald-300 font-medium bg-emerald-950/60 py-1.5 px-4 rounded-full border border-emerald-500/30 inline-block shadow-inner">
                         <i class="fa-solid fa-shield-cat mr-1.5 animate-pulse"></i> {{ horasDeVitoria }} horas acumuladas em domínio próprio
                     </p>
 
                     <!-- CONQUISTAS / MEDALHAS -->
                     <div class="pt-3 border-t border-white/10 grid grid-cols-4 gap-2 text-center">
                         <div v-for="m in medalhas" :key="m.dias" :class="diasDeVitoria >= m.dias ? 'opacity-100 text-amber-400' : 'opacity-30 text-slate-500'" class="flex flex-col items-center">
-                            <i :class="m.icone" class="text-lg mb-1"></i>
+                            <i :class="m.icone" class="text-base mb-0.5"></i>
                             <span class="text-[9px] font-bold uppercase">{{ m.dias }}d</span>
                         </div>
                     </div>
@@ -144,43 +144,42 @@
                     </div>
                 </div>
 
-                <!-- SEÇÃO EM DESTAQUE: REGISTRO DE SENTIMENTOS E GATILHOS -->
-                <div class="card-glass-accent p-6 rounded-3xl space-y-4">
-                    <div class="flex items-center justify-between border-b border-amber-500/20 pb-3">
-                        <div class="flex items-center gap-2.5">
-                            <div class="w-8 h-8 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-sm border border-amber-500/40">
+                <!-- BOTÃO MODO EMERGÊNCIA EM PRIMEIRO DESTAQUE -->
+                <button @click="abrirEmergencia" class="w-full card-glass p-4 rounded-2xl flex items-center gap-4 border-2 border-rose-600/60 hover:border-rose-500 bg-rose-950/30 shadow-lg shadow-rose-950/40 transition group text-left">
+                    <div class="w-12 h-12 rounded-xl bg-rose-600 text-white flex items-center justify-center text-xl group-hover:scale-110 transition shrink-0 shadow-md">
+                        <i class="fa-solid fa-shield-halved"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-black text-rose-300 text-sm uppercase tracking-wide">Modo Emergência (Socorro Imediato)</h3>
+                        <p class="text-[11px] text-slate-300 font-medium">Sua mente foi fisgada por um gatilho? Clique aqui.</p>
+                    </div>
+                </button>
+
+                <!-- SEÇÃO REGISTRO DE SENTIMENTOS E GATILHOS -->
+                <div class="card-glass-accent p-5 rounded-3xl space-y-3">
+                    <div class="flex items-center justify-between border-b border-amber-500/20 pb-2">
+                        <div class="flex items-center gap-2">
+                            <div class="w-7 h-7 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center text-xs border border-amber-500/40">
                                 <i class="fa-solid fa-heart-pulse"></i>
                             </div>
                             <div>
-                                <h3 class="text-xs font-black text-amber-400 uppercase tracking-wider">Como Você Está se Sentindo Agora?</h3>
-                                <p class="text-[10px] text-slate-300">Identifique o gatilho emocional para desarmar o impulso</p>
+                                <h3 class="text-xs font-black text-amber-400 uppercase tracking-wider">Como Você Está se Sentindo?</h3>
                             </div>
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-3 gap-2.5">
-                        <button v-for="s in sentimentosComIcone" :key="s.nome" @click="registrarGatilho(s.nome)" class="py-3 px-2 bg-slate-900/80 hover:bg-amber-500/30 hover:border-amber-400/60 border border-slate-700/80 rounded-2xl flex flex-col items-center justify-center gap-1.5 transition active:scale-95 group">
-                            <i :class="s.icone" class="text-base text-amber-400 group-hover:scale-110 transition"></i>
-                            <span class="text-[11px] font-bold text-slate-200 group-hover:text-amber-200">{{ s.nome }}</span>
+                    <div class="grid grid-cols-3 gap-2">
+                        <button v-for="s in sentimentosComIcone" :key="s.nome" @click="registrarGatilho(s.nome)" class="py-2.5 px-2 bg-slate-900/80 hover:bg-amber-500/30 hover:border-amber-400/60 border border-slate-700/80 rounded-2xl flex flex-col items-center justify-center gap-1 transition active:scale-95 group">
+                            <i :class="s.icone" class="text-sm text-amber-400 group-hover:scale-110 transition"></i>
+                            <span class="text-[10px] font-bold text-slate-200 group-hover:text-amber-200">{{ s.nome }}</span>
                         </button>
                     </div>
 
-                    <div v-if="ultimoGatilho" class="pt-2 border-t border-white/10 flex items-center justify-between text-[11px]">
-                        <span class="text-slate-400">Última emoção registrada:</span>
-                        <span class="font-bold text-amber-300 bg-amber-950/60 py-1 px-3 rounded-full border border-amber-500/30">{{ ultimoGatilho }}</span>
+                    <div v-if="ultimoGatilho" class="pt-2 border-t border-white/10 flex items-center justify-between text-[10px]">
+                        <span class="text-slate-400">Último registro:</span>
+                        <span class="font-bold text-amber-300 bg-amber-950/60 py-0.5 px-2.5 rounded-full border border-amber-500/30">{{ ultimoGatilho }}</span>
                     </div>
                 </div>
-
-                <!-- CARTÃO MODO EMERGÊNCIA -->
-                <button @click="abrirEmergencia" class="w-full card-glass p-4 rounded-2xl flex items-center gap-4 border-2 border-rose-900/40 hover:border-rose-600/60 transition group text-left">
-                    <div class="w-12 h-12 rounded-xl bg-rose-600/10 text-rose-500 border border-rose-500/30 flex items-center justify-center text-xl group-hover:scale-110 transition shrink-0">
-                        <i class="fa-solid fa-shield-halved"></i>
-                    </div>
-                    <div>
-                        <h3 class="font-bold text-rose-300 text-sm">Modo Emergência (Pausa de Socorro)</h3>
-                        <p class="text-[11px] text-slate-400">Gatilhos agudos de Reels/+18? Clique para socorro imediato.</p>
-                    </div>
-                </button>
             </div>
 
             <!-- ABA 2: FOCO / DESAFIO 21 DIAS -->
@@ -235,7 +234,7 @@
             </div>
         </div>
 
-        <!-- BARRA DE NAVEGAÇÃO INFERIOR -->
+        <!-- BARRA DE NAVEGAÇÃO INFERIOR COM BOTÃO CENTRAL DE EMERGÊNCIA -->
         <nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto p-3 z-40">
             <div class="card-glass rounded-2xl p-2 flex justify-around items-center border border-white/10 shadow-2xl backdrop-blur-2xl">
                 <button @click="abaAtiva = 'home'" :class="abaAtiva === 'home' ? 'text-amber-400 bg-amber-500/10' : 'text-slate-400 hover:text-white'" class="flex flex-col items-center py-1.5 px-3 rounded-xl transition">
@@ -248,8 +247,9 @@
                     <span class="text-[10px] mt-1 font-medium">Foco</span>
                 </button>
 
-                <button @click="abrirEmergencia" class="w-12 h-12 rounded-2xl btn-gold text-lume-dark flex items-center justify-center shadow-lg -mt-4 border-2 border-lume-dark active:scale-90 transition">
-                    <i class="fa-solid fa-sun text-lg text-slate-950"></i>
+                <!-- BOTÃO CENTRAL DE EMERGÊNCIA PERMANENTE NO RODAPÉ -->
+                <button @click="abrirEmergencia" class="w-12 h-12 rounded-2xl bg-rose-600 hover:bg-rose-500 text-white flex items-center justify-center shadow-lg -mt-4 border-2 border-lume-dark active:scale-90 transition shadow-rose-950/60">
+                    <i class="fa-solid fa-shield-halved text-lg"></i>
                 </button>
 
                 <button @click="abaAtiva = 'devocional'" :class="abaAtiva === 'devocional' ? 'text-amber-400 bg-amber-500/10' : 'text-slate-400 hover:text-white'" class="flex flex-col items-center py-1.5 px-3 rounded-xl transition">
