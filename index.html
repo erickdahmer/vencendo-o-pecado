@@ -15,8 +15,8 @@
             theme: {
                 extend: {
                     colors: {
-                        'lume-dark': '#0a0f1e',
-                        'lume-accent': '#f59e0b', // Dourado Âmbar Premium
+                        'lume-dark': '#080c18',
+                        'lume-accent': '#eab308',
                     }
                 }
             }
@@ -24,13 +24,13 @@
     </script>
     <style>
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
             margin: 0;
             padding: 0;
             min-height: 100vh;
             color: #f8fafc;
-            /* IMAGEM DE FUNDO PREMIUM: Leão imponente com ovelha em harmonia */
-            background-image: url('https://images.unsplash.com/photo-1534188753412-3e26d0d618d6?q=80&w=2070&auto=format&fit=crop');
+            /* IMAGEM DE FUNDO: Leão e Ovelha */
+            background-image: url('https://images.unsplash.com/photo-1546182990-dffeafbe841d?q=80&w=2070&auto=format&fit=crop');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
@@ -38,23 +38,30 @@
         }
 
         .overlay-bg {
-            background-color: rgba(7, 10, 20, 0.85);
-            backdrop-filter: blur(12px);
+            background: radial-gradient(circle at center, rgba(10, 15, 30, 0.78) 0%, rgba(5, 8, 16, 0.92) 100%);
+            backdrop-filter: blur(10px);
+        }
+
+        /* Card do Logo identico ao ícone do App */
+        .app-icon-glass {
+            background: linear-gradient(145deg, rgba(30, 42, 68, 0.7) 0%, rgba(15, 22, 38, 0.8) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.2);
         }
 
         .card-glass {
-            background: rgba(18, 24, 42, 0.65);
+            background: rgba(16, 23, 42, 0.65);
             backdrop-filter: blur(16px);
             border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 10px 30px 0 rgba(0, 0, 0, 0.5);
+            box-shadow: 0 10px 32px 0 rgba(0, 0, 0, 0.45);
         }
         
         .btn-gold {
-            background: linear-gradient(135deg, #fbb124 0%, #d97706 100%);
-            box-shadow: 0 4px 15px rgba(217, 119, 6, 0.4);
+            background: linear-gradient(135deg, #facc15 0%, #ca8a04 100%);
+            box-shadow: 0 4px 15px rgba(202, 138, 4, 0.4);
         }
         .btn-gold:hover {
-            background: linear-gradient(135deg, #fcd34d 0%, #f59e0b 100%);
+            background: linear-gradient(135deg, #fde047 0%, #eab308 100%);
         }
 
         @keyframes pulse-red {
@@ -73,41 +80,48 @@
     <div id="app" class="relative z-10 max-w-md mx-auto p-4 md:p-6 pb-28 min-h-screen flex flex-col justify-between">
 
         <div class="space-y-6">
-            <!-- CABEÇALHO LUME COM LOGO MINIMALISTA APPLE-INSPIRED -->
-            <header class="text-center space-y-3 pt-3">
-                <div class="inline-flex items-center justify-center w-20 h-20 rounded-3xl bg-gradient-to-b from-amber-500/20 to-amber-600/10 border border-amber-500/30 shadow-2xl backdrop-blur-xl relative overflow-hidden">
-                    <!-- Vetor Minimalista de Luz e Cruz (Lume) -->
-                    <svg class="w-10 h-10 text-amber-400 drop-shadow-[0_0_10px_rgba(245,158,11,0.8)]" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M12 2L15 8L22 12L15 16L12 22L9 16L2 12L9 8L12 2Z" fill="url(#lume-grad)" />
-                        <path d="M12 5V19M5 12H19" stroke="#070a14" stroke-width="2.2" stroke-linecap="round"/>
+            <!-- CABEÇALHO LUME COM O LOGO EXATO DA IMAGEM -->
+            <header class="text-center space-y-3 pt-4">
+                <!-- Card do Ícone Apple-style -->
+                <div class="inline-flex items-center justify-center w-24 h-24 rounded-3xl app-icon-glass shadow-2xl relative overflow-hidden my-1">
+                    <!-- SVG Exato do Logo Lume (Prisma e Cruz em Espaço Negativo) -->
+                    <svg class="w-14 h-14 drop-shadow-[0_0_12px_rgba(234,179,8,0.7)]" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <defs>
-                            <linearGradient id="lume-grad" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
-                                <stop stop-color="#FBBF24"/>
-                                <stop offset="1" stop-color="#D97706"/>
+                            <linearGradient id="lume-gold-grad" x1="10" y1="10" x2="90" y2="90" gradientUnits="userSpaceOnUse">
+                                <stop offset="0%" stop-color="#FEF08A"/>
+                                <stop offset="50%" stop-color="#EAB308"/>
+                                <stop offset="100%" stop-color="#CA8A04"/>
                             </linearGradient>
                         </defs>
+                        <!-- Prisma exterior com recorte da cruz -->
+                        <path d="M50 12 L82 78 C70 72 60 70 50 78 C40 70 30 72 18 78 L50 12 Z" 
+                              fill="none" 
+                              stroke="url(#lume-gold-grad)" 
+                              stroke-width="5" 
+                              stroke-linejoin="round"/>
+                        <!-- Tracos internos formando a cruz refinada -->
+                        <path d="M50 22 V72" stroke="url(#lume-gold-grad)" stroke-width="4.5" stroke-linecap="round"/>
+                        <path d="M30 48 H70" stroke="url(#lume-gold-grad)" stroke-width="4.5" stroke-linecap="round"/>
                     </svg>
                 </div>
                 
-                <h1 class="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-amber-400 to-amber-600 tracking-widest uppercase">LUME</h1>
+                <h1 class="text-3xl font-black tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-yellow-200 via-amber-400 to-yellow-500 uppercase">LUME</h1>
                 
                 <div class="px-2">
                     <p class="text-slate-200 text-xs italic leading-relaxed font-medium">
                         "Vós sois a luz do mundo; não se pode esconder uma cidade edificada sobre um monte."
                     </p>
                     <span class="block text-[10px] font-bold text-amber-400 uppercase tracking-widest mt-1">
-                        — Mateus 5:14
+                        — MATEUS 5:14
                     </span>
                 </div>
             </header>
 
-            <!-- ABA ATIVA 1: VISÃO GERAL / HOME -->
+            <!-- ABA ATIVA 1: INÍCIO / HOME -->
             <div v-show="abaAtiva === 'home'" class="space-y-5">
                 <!-- CONTADOR DE DIAS -->
                 <div class="card-glass p-7 rounded-3xl text-center space-y-3 relative overflow-hidden">
-                    <div class="absolute -right-10 -top-10 w-32 h-32 bg-amber-500/5 rounded-full blur-2xl"></div>
-                    
-                    <span class="text-[11px] text-slate-400 font-semibold uppercase tracking-widest">Tempo de Caminhada na Luz</span>
+                    <span class="text-[11px] text-slate-400 font-semibold uppercase tracking-widest">TEMPO DE CAMINHADA NA LUZ</span>
                     
                     <div class="flex justify-center items-baseline gap-2">
                         <span class="text-7xl font-extrabold text-white tracking-tighter">{{ diasDeVitoria }}</span>
@@ -125,23 +139,21 @@
                     </div>
                 </div>
 
-                <!-- CARTÃO DE EMERGÊNCIA & MENTOR -->
-                <div class="grid grid-cols-1 gap-3">
-                    <button @click="abrirEmergencia" class="card-glass p-4 rounded-2xl flex items-center gap-4 border-2 border-rose-900/40 hover:border-rose-600/60 transition group text-left">
-                        <div class="w-12 h-12 rounded-xl bg-rose-600/10 text-rose-500 border border-rose-500/30 flex items-center justify-center text-xl group-hover:scale-110 transition shrink-0">
-                            <i class="fa-solid fa-shield-halved"></i>
-                        </div>
-                        <div>
-                            <h3 class="font-bold text-rose-300 text-sm">Modo Emergência (Socorro)</h3>
-                            <p class="text-[11px] text-slate-400">Gatilhos agudos? Pausa imediata e resgate.</p>
-                        </div>
-                    </button>
-                </div>
+                <!-- CARTÃO MODO EMERGÊNCIA -->
+                <button @click="abrirEmergencia" class="w-full card-glass p-4 rounded-2xl flex items-center gap-4 border-2 border-rose-900/40 hover:border-rose-600/60 transition group text-left">
+                    <div class="w-12 h-12 rounded-xl bg-rose-600/10 text-rose-500 border border-rose-500/30 flex items-center justify-center text-xl group-hover:scale-110 transition shrink-0">
+                        <i class="fa-solid fa-shield-halved"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-rose-300 text-sm">Modo Emergência (Socorro)</h3>
+                        <p class="text-[11px] text-slate-400">Gatilhos agudos? Pausa imediata e resgate.</p>
+                    </div>
+                </button>
 
                 <!-- PALAVRA DO DIA -->
                 <div class="card-glass p-6 rounded-3xl space-y-3">
                     <div class="flex items-center gap-2 text-amber-400 text-xs font-bold uppercase tracking-widest">
-                        <i class="fa-solid fa-scroll"></i> Palavra de Vencedor
+                        <i class="fa-solid fa-scroll"></i> PALAVRA DE VENCEDOR
                     </div>
                     <blockquote class="text-sm text-slate-100 italic border-l-4 border-amber-500 pl-4 py-1 leading-relaxed font-medium">
                         "Fugi da imoralidade sexual. Qualquer outro pecado que o homem comete é fora do corpo; mas o que se prostitui peca contra o seu próprio corpo."
@@ -150,7 +162,7 @@
                 </div>
             </div>
 
-            <!-- ABA ATIVA 2: FOCO / TAREFAS ANTI-GATILHO -->
+            <!-- ABA ATIVA 2: FOCO -->
             <div v-show="abaAtiva === 'foco'" class="space-y-4">
                 <div class="card-glass p-6 rounded-3xl space-y-3">
                     <div class="flex items-center gap-2 text-amber-400 text-xs font-bold uppercase tracking-widest">
@@ -164,14 +176,14 @@
                 <div class="card-glass p-6 rounded-3xl space-y-3">
                     <h3 class="text-sm font-bold text-amber-400 uppercase tracking-wider">Passos Práticos de Pureza</h3>
                     <ul class="text-xs text-slate-300 space-y-2 list-disc list-inside">
-                        <li>Não leve o telemóvel para o quarto na hora de dormir.</li>
+                        <li>Não leve o celular para o quarto na hora de dormir.</li>
                         <li>Desative notificações de vídeos curtos após as 21h.</li>
                         <li>Substitua a ansiedade por uma oração curta imediata.</li>
                     </ul>
                 </div>
             </div>
 
-            <!-- ABA ATIVA 3: DEVOCIONAIS -->
+            <!-- ABA ATIVA 3: ESTUDOS / DEVOCIONAIS -->
             <div v-show="abaAtiva === 'devocional'" class="space-y-4">
                 <div v-for="(dev, idx) in devocionais" :key="idx" class="card-glass p-6 rounded-3xl space-y-2.5">
                     <span class="text-[10px] font-black text-amber-400 uppercase tracking-widest bg-amber-500/10 py-1 px-3 rounded-full border border-amber-500/20">Estudo {{ idx + 1 }}</span>
@@ -183,7 +195,7 @@
                 </div>
             </div>
 
-            <!-- ABA ATIVA 4: CONFIGURAR MENTOR / PARCEIRO -->
+            <!-- ABA ATIVA 4: MENTOR -->
             <div v-show="abaAtiva === 'config'" class="card-glass p-6 rounded-3xl space-y-4">
                 <h3 class="text-base font-extrabold text-amber-400 flex items-center gap-2 uppercase tracking-wider">
                     <i class="fa-solid fa-user-shield"></i> Parceiro de Fé
@@ -195,16 +207,16 @@
                     <label class="block text-xs text-slate-400 font-semibold">Número do WhatsApp (com DDD):</label>
                     <input v-model="numeroMentor" type="text" placeholder="Ex: 51999999999" class="w-full p-3.5 rounded-xl bg-lume-dark border border-slate-700 text-xs text-white placeholder:text-slate-600 focus:border-amber-500 focus:ring-1 focus:ring-amber-500">
                 </div>
-                <button @click="salvarMentor" class="w-full py-3.5 btn-gold text-white font-extrabold rounded-xl text-xs uppercase tracking-widest transition">
+                <button @click="salvarMentor" class="w-full py-3.5 btn-gold text-lume-dark font-extrabold rounded-xl text-xs uppercase tracking-widest transition">
                     Salvar Parceiro
                 </button>
             </div>
         </div>
 
-        <!-- BARRA DE NAVEGAÇÃO INFERIOR (ESTILO NATIVO APPLE APP) -->
+        <!-- BARRA DE NAVEGAÇÃO INFERIOR -->
         <nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto p-3 z-40">
             <div class="card-glass rounded-2xl p-2 flex justify-around items-center border border-white/10 shadow-2xl backdrop-blur-2xl">
-                <!-- Ícone 1: Home / Dias -->
+                <!-- Ícone 1: Início -->
                 <button @click="abaAtiva = 'home'" :class="abaAtiva === 'home' ? 'text-amber-400 bg-amber-500/10' : 'text-slate-400 hover:text-white'" class="flex flex-col items-center py-1.5 px-3 rounded-xl transition">
                     <i class="fa-solid fa-house text-base"></i>
                     <span class="text-[10px] mt-1 font-medium">Início</span>
@@ -216,18 +228,18 @@
                     <span class="text-[10px] mt-1 font-medium">Foco</span>
                 </button>
 
-                <!-- Botão Central de Emergência no Rodapé -->
-                <button @click="abrirEmergencia" class="w-12 h-12 rounded-full btn-gold text-lume-dark flex items-center justify-center shadow-lg -mt-4 border-2 border-lume-dark active:scale-90 transition">
+                <!-- Botão Central de Emergência -->
+                <button @click="abrirEmergencia" class="w-12 h-12 rounded-2xl btn-gold text-lume-dark flex items-center justify-center shadow-lg -mt-4 border-2 border-lume-dark active:scale-90 transition">
                     <i class="fa-solid fa-sun text-lg text-slate-950"></i>
                 </button>
 
-                <!-- Ícone 3: Devocional -->
+                <!-- Ícone 3: Estudos -->
                 <button @click="abaAtiva = 'devocional'" :class="abaAtiva === 'devocional' ? 'text-amber-400 bg-amber-500/10' : 'text-slate-400 hover:text-white'" class="flex flex-col items-center py-1.5 px-3 rounded-xl transition">
                     <i class="fa-solid fa-book-bible text-base"></i>
                     <span class="text-[10px] mt-1 font-medium">Estudos</span>
                 </button>
 
-                <!-- Ícone 4: Config Mentor -->
+                <!-- Ícone 4: Mentor -->
                 <button @click="abaAtiva = 'config'" :class="abaAtiva === 'config' ? 'text-amber-400 bg-amber-500/10' : 'text-slate-400 hover:text-white'" class="flex flex-col items-center py-1.5 px-3 rounded-xl transition">
                     <i class="fa-solid fa-user-gear text-base"></i>
                     <span class="text-[10px] mt-1 font-medium">Mentor</span>
@@ -235,7 +247,7 @@
             </div>
         </nav>
 
-        <!-- MODAL MODO EMERGÊNCIA (SOCORRO RÁPIDO) -->
+        <!-- MODAL MODO EMERGÊNCIA -->
         <div v-if="modalEmergencia" class="fixed inset-0 z-50 p-6 flex flex-col items-center justify-center">
             <div class="fixed inset-0 bg-slate-950/90 backdrop-blur-xl z-0"></div>
             
@@ -297,15 +309,15 @@
                 ]);
 
                 onMounted(() => {
-                    const dataSalva = localStorage.getItem('dataInicioCaminhada_lume_v2');
+                    const dataSalva = localStorage.getItem('dataInicioCaminhada_lume_v3');
                     if (dataSalva) {
                         dataInicio.value = new Date(dataSalva);
                     } else {
                         dataInicio.value = new Date();
-                        localStorage.setItem('dataInicioCaminhada_lume_v2', dataInicio.value.toISOString());
+                        localStorage.setItem('dataInicioCaminhada_lume_v3', dataInicio.value.toISOString());
                     }
 
-                    const mentorSalvo = localStorage.getItem('numeroMentor_lume_v2');
+                    const mentorSalvo = localStorage.getItem('numeroMentor_lume_v3');
                     if (mentorSalvo) numeroMentor.value = mentorSalvo;
                 });
 
@@ -322,7 +334,7 @@
                 const reiniciarCaminhada = () => {
                     if (confirm("Em Cristo há perdão e restauração abundante. Deseja reiniciar sua contagem e iniciar uma nova jornada na luz?")) {
                         dataInicio.value = new Date();
-                        localStorage.setItem('dataInicioCaminhada_lume_v2', dataInicio.value.toISOString());
+                        localStorage.setItem('dataInicioCaminhada_lume_v3', dataInicio.value.toISOString());
                     }
                 };
 
@@ -335,7 +347,7 @@
                         alert('Por favor, insira um número válido com DDD.');
                         return;
                     }
-                    localStorage.setItem('numeroMentor_lume_v2', numeroMentor.value.trim());
+                    localStorage.setItem('numeroMentor_lume_v3', numeroMentor.value.trim());
                     alert('Parceiro salvo com sucesso!');
                     abaAtiva.value = 'home';
                 };
