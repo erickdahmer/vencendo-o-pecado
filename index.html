@@ -10,156 +10,227 @@
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <!-- FontAwesome Ícones -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'fng-dark': '#0a0f1e',
+                        'fng-accent': '#d97706', // Dourado Âmbar
+                    }
+                }
+            }
+        }
+    </script>
     <style>
-        body { background-color: #0b132b; color: #f8fafc; font-family: 'Segoe UI', system-ui, sans-serif; }
-        .amber-gradient { background: linear-gradient(135deg, #d97706 0%, #b45309 100%); }
-        .card-dark { background-color: #1c2541; border: 1px solid #3a506b; }
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            margin: 0;
+            padding: 0;
+            min-h-screen;
+            color: #f8fafc;
+            /* IMAGEM DE FUNDO: Escolhi uma paisagem sutil de montanhas ao amanhecer */
+            background-image: url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=2070&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+        }
+
+        /* Camada de escurecimento e desfoque sobre a imagem de fundo (Glassmorphism efeito) */
+        .overlay-bg {
+            background-color: rgba(10, 15, 30, 0.75); /* Fundo escuro semi-transparente */
+            backdrop-filter: blur(8px); /* Desfoque sutil na imagem de fundo */
+        }
+
+        /* Estilo para os cards com efeito de vidro (Glassmorphism) */
+        .card-glass {
+            background: rgba(28, 37, 65, 0.4); /* Fundo do card muito transparente */
+            backdrop-filter: blur(12px); /* Desfoque interno para o efeito de vidro */
+            border: 1px solid rgba(255, 255, 255, 0.08); /* Borda sutil */
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3); /* Sombra suave */
+        }
+        
+        /* Botão dourado com gradiente */
+        .btn-gold {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            box-shadow: 0 4px 14px 0 rgba(217, 119, 6, 0.3);
+        }
+        .btn-gold:hover {
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+        }
+
+        /* Animação suave para o modo de emergência */
+        @keyframes pulse-red {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+        .animate-pulse-red {
+            animation: pulse-red 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
     </style>
 </head>
-<body class="p-3 md:p-6 min-h-screen pb-20">
-    <div id="app" class="max-w-md mx-auto space-y-5">
+<body class="relative">
+    
+    <!-- Camada de sobreposição para escurecer e desfocar o fundo uniformemente -->
+    <div class="overlay-bg fixed inset-0 z-0"></div>
+
+    <div id="app" class="relative z-10 max-w-lg mx-auto p-4 md:p-6 pb-24 min-h-screen space-y-6">
 
         <!-- CABEÇALHO -->
-        <header class="text-center space-y-1 pt-2">
-            <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/10 text-amber-400 mb-1 border border-amber-500/20">
-                <i class="fa-solid fa-cross text-xl"></i>
+        <header class="text-center space-y-2 pt-4">
+            <div class="inline-flex items-center justify-center w-14 h-14 rounded-full bg-fng-accent/10 text-fng-accent border border-fng-accent/20">
+                <i class="fa-solid fa-cross text-2xl"></i>
             </div>
-            <h1 class="text-xl font-bold text-amber-400 tracking-wide">FIRMES NA GRAÇA</h1>
-            <p class="text-slate-400 text-xs">"Transformai-vos pela renovação da vossa mente." — Romanos 12:2</p>
+            <h1 class="text-2xl font-black text-fng-accent tracking-tighter uppercase">Firmes na Graça</h1>
+            <p class="text-slate-300 text-xs italic px-6 leading-relaxed">"Portanto, agora nenhuma condenação há para os que estão em Cristo Jesus, que não andam segundo a carne, mas segundo o Espírito." — Romanos 8:1</p>
         </header>
 
-        <!-- BOTÃO DE EMERGÊNCIA (SOCORRO IMEDIATO) -->
-        <div class="bg-rose-950/60 border border-rose-600/50 p-4 rounded-2xl text-center space-y-2 shadow-lg">
-            <span class="text-[10px] font-bold uppercase tracking-wider text-rose-300 flex items-center justify-center gap-1">
-                <i class="fa-solid fa-triangle-exclamation"></i> Tentações Agudas
-            </span>
-            <button @click="abrirEmergencia" class="w-full py-3.5 bg-rose-600 hover:bg-rose-500 active:scale-95 text-white font-extrabold rounded-xl shadow-xl text-sm flex items-center justify-center gap-2 transition">
-                <i class="fa-solid fa-shield-halved text-base"></i> MODO EMERGÊNCIA / SOCORRO
-            </button>
-            <p class="text-[11px] text-slate-400">Pressione se estiver prestes a ceder ao pecado.</p>
-        </div>
-
-        <!-- CONTADOR DE DIAS DE VITÓRIA -->
-        <div class="card-dark p-6 rounded-2xl text-center space-y-3 shadow-xl">
-            <span class="text-xs text-slate-400 font-semibold uppercase tracking-wider">Caminhada em Libertação</span>
+        <!-- CONTADOR DE DIAS DE VITÓRIA (Central e Principal) -->
+        <div class="card-glass p-8 rounded-3xl text-center space-y-4">
+            <span class="text-xs text-slate-400 font-semibold uppercase tracking-widest">Tempo de Caminhada em Pureza</span>
             
             <div class="flex justify-center items-baseline gap-2">
-                <span class="text-5xl font-black text-amber-400">{{ diasDeVitoria }}</span>
-                <span class="text-sm font-semibold text-slate-300">dias limpo</span>
+                <span class="text-7xl font-extrabold text-white tracking-tighter">{{ diasDeVitoria }}</span>
+                <span class="text-lg font-bold text-slate-200">dias</span>
             </div>
 
-            <p class="text-xs text-emerald-400 font-medium bg-emerald-950/40 py-1.5 px-3 rounded-full border border-emerald-500/30 inline-block">
-                <i class="fa-solid fa-circle-check mr-1"></i> {{ horasDeVitoria }} horas de vitória contínua
+            <p class="text-xs text-emerald-300 font-medium bg-emerald-950/50 py-2 px-4 rounded-full border border-emerald-500/30 inline-block shadow-inner">
+                <i class="fa-solid fa-circle-check mr-1.5 animate-pulse"></i> {{ horasDeVitoria }} horas acumuladas sob a Graça
             </p>
 
-            <div class="pt-2 border-t border-slate-700/60 flex justify-between items-center text-xs text-slate-400">
-                <button @click="reiniciarCaminhada" class="hover:text-rose-400 transition flex items-center gap-1">
-                    <i class="fa-solid fa-rotate-left"></i> Recomeçar (Graça)
-                </button>
-                <button @click="abaAtiva = 'config'" class="hover:text-amber-400 transition flex items-center gap-1">
-                    <i class="fa-solid fa-gear"></i> Mentor
+            <div class="pt-3 border-t border-white/5 flex justify-center items-center text-xs text-slate-400">
+                <button @click="reiniciarCaminhada" class="hover:text-rose-400 transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-rotate-left"></i> Recomeçar (Confissão e Restauração)
                 </button>
             </div>
         </div>
 
-        <!-- ABAS DE NAVEGAÇÃO -->
-        <div class="flex bg-slate-900/80 p-1 rounded-xl border border-slate-800 text-xs font-semibold">
-            <button @click="abaAtiva = 'hoje'" :class="abaAtiva === 'hoje' ? 'bg-amber-600 text-white' : 'text-slate-400 hover:text-white'" class="flex-1 py-2.5 rounded-lg transition">
-                <i class="fa-solid fa-sun mr-1"></i> Hoje
+        <!-- ABA DE AÇÕES RÁPIDAS (EMERGÊNCIA E MENTOR) -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- BOTÃO DE EMERGÊNCIA -->
+            <button @click="abrirEmergencia" class="card-glass p-5 rounded-2xl flex items-center gap-4 border-2 border-rose-900/40 hover:border-rose-600/60 transition group text-left">
+                <div class="w-12 h-12 rounded-xl bg-rose-600/10 text-rose-500 border border-rose-500/30 flex items-center justify-center text-xl group-hover:scale-110 transition">
+                    <i class="fa-solid fa-shield-halved"></i>
+                </div>
+                <div>
+                    <h3 class="font-bold text-rose-300">Modo Emergência</h3>
+                    <p class="text-[11px] text-slate-400">Tentações agudas? Clique para socorro imediato.</p>
+                </div>
             </button>
-            <button @click="abaAtiva = 'devocional'" :class="abaAtiva === 'devocional' ? 'bg-amber-600 text-white' : 'text-slate-400 hover:text-white'" class="flex-1 py-2.5 rounded-lg transition">
-                <i class="fa-solid fa-book-bible mr-1"></i> Devocionais
+            <!-- CONFIGURAR MENTOR -->
+            <button @click="abaAtiva = 'config'" class="card-glass p-5 rounded-2xl flex items-center gap-4 hover:border-fng-accent/30 transition group text-left">
+                <div class="w-12 h-12 rounded-xl bg-fng-accent/10 text-fng-accent border border-fng-accent/30 flex items-center justify-center text-xl group-hover:scale-110 transition">
+                    <i class="fa-solid fa-user-shield"></i>
+                </div>
+                <div>
+                    <h3 class="font-bold text-slate-100">Parceiro de Fé</h3>
+                    <p class="text-[11px] text-slate-400">Cadastre o contato do seu mentor ou irmão.</p>
+                </div>
             </button>
-            <button @click="abaAtiva = 'config'" :class="abaAtiva === 'config' ? 'bg-amber-600 text-white' : 'text-slate-400 hover:text-white'" class="flex-1 py-2.5 rounded-lg transition">
-                <i class="fa-solid fa-user-shield mr-1"></i> Socorro
+        </div>
+
+        <!-- ABAS DE NAVEGAÇÃO SECUNDÁRIAS -->
+        <div class="flex bg-fng-dark/60 p-1.5 rounded-2xl border border-white/5 shadow-inner text-xs font-semibold">
+            <button @click="abaAtiva = 'hoje'" :class="abaAtiva === 'hoje' ? 'bg-fng-accent text-white shadow-md' : 'text-slate-400 hover:text-white'" class="flex-1 py-3 rounded-xl transition flex items-center justify-center gap-1.5">
+                <i class="fa-solid fa-sun text-sm"></i> Foco de Hoje
+            </button>
+            <button @click="abaAtiva = 'devocional'" :class="abaAtiva === 'devocional' ? 'bg-fng-accent text-white shadow-md' : 'text-slate-400 hover:text-white'" class="flex-1 py-3 rounded-xl transition flex items-center justify-center gap-1.5">
+                <i class="fa-solid fa-book-bible text-sm"></i> Devocionais
             </button>
         </div>
 
         <!-- CONTEÚDO ABA 1: HOJE (VERSÍCULO E PROMESSA) -->
         <div v-show="abaAtiva === 'hoje'" class="space-y-4">
-            <div class="card-dark p-5 rounded-2xl space-y-3">
-                <div class="flex items-center gap-2 text-amber-400 text-xs font-bold uppercase">
-                    <i class="fa-solid fa-scroll"></i> Versículo para Vencer Hoje
+            <div class="card-glass p-6 rounded-3xl space-y-3">
+                <div class="flex items-center gap-2.5 text-fng-accent text-xs font-bold uppercase tracking-widest">
+                    <i class="fa-solid fa-scroll"></i> Palavra de Poder para Vencer
                 </div>
-                <blockquote class="text-xs md:text-sm text-slate-200 italic border-l-2 border-amber-500 pl-3 py-1 leading-relaxed">
+                <blockquote class="text-sm md:text-base text-slate-100 italic border-l-4 border-fng-accent pl-4 py-1.5 leading-relaxed font-medium">
                     "{{ versiculoDoDia.texto }}"
                 </blockquote>
-                <span class="block text-right text-xs font-bold text-amber-400">— {{ versiculoDoDia.referencia }}</span>
+                <span class="block text-right text-xs font-bold text-slate-300">— {{ versiculoDoDia.referencia }}</span>
             </div>
 
-            <div class="card-dark p-5 rounded-2xl space-y-2">
-                <h3 class="text-xs font-bold text-slate-300 uppercase"><i class="fa-solid fa-lightbulb text-amber-400 mr-1"></i> Dica Prática de Combate</h3>
-                <p class="text-xs text-slate-400 leading-relaxed">
-                    Pornografia alimenta-se do isolamento e do tédio. Não fique sozinho no quarto com o celular à noite. Deixe os aparelhos fora do alcance ao se deitar.
+            <div class="card-glass p-5 rounded-2xl space-y-2">
+                <h3 class="text-xs font-bold text-slate-300 uppercase tracking-wider"><i class="fa-solid fa-lightbulb text-fng-accent mr-1.5"></i> Dica de Combate</h3>
+                <p class="text-[11px] text-slate-400 leading-relaxed">
+                    A tentação muitas vezes começa na mente. Quando um pensamento impuro surgir, não lute contra ele diretamente; em vez disso, substitua-o imediatamente por uma oração curta ou por um versículo memorizado. Ocupe sua mente com o que é puro.
                 </p>
             </div>
         </div>
 
         <!-- CONTEÚDO ABA 2: DEVOCIONAIS -->
         <div v-show="abaAtiva === 'devocional'" class="space-y-4">
-            <div v-for="(dev, idx) in devocionais" :key="idx" class="card-dark p-5 rounded-2xl space-y-2">
-                <span class="text-[10px] font-bold text-amber-400 uppercase tracking-wider">Estudo {{ idx + 1 }}</span>
-                <h3 class="text-sm font-bold text-slate-100">{{ dev.titulo }}</h3>
-                <p class="text-xs text-slate-300 leading-relaxed">{{ dev.conteudo }}</p>
-                <div class="pt-2 text-right">
-                    <span class="text-[11px] font-bold text-amber-400/80">{{ dev.referencia }}</span>
+            <div v-for="(dev, idx) in devocionais" :key="idx" class="card-glass p-6 rounded-3xl space-y-2.5">
+                <span class="text-[10px] font-black text-fng-accent uppercase tracking-widest bg-fng-accent/10 py-1 px-3 rounded-full border border-fng-accent/20">Estudo {{ idx + 1 }}</span>
+                <h3 class="text-base font-extrabold text-white tracking-tight">{{ dev.titulo }}</h3>
+                <p class="text-xs text-slate-200 leading-relaxed font-normal">{{ dev.conteudo }}</p>
+                <div class="pt-3 border-t border-white/5 text-right">
+                    <span class="text-xs font-bold text-fng-accent/90">{{ dev.referencia }}</span>
                 </div>
             </div>
         </div>
 
-        <!-- CONTEÚDO ABA 3: CONFIGURAR MENTOR DE EMERGÊNCIA -->
-        <div v-show="abaAtiva === 'config'" class="card-dark p-5 rounded-2xl space-y-4">
-            <h3 class="text-sm font-bold text-amber-400 flex items-center gap-2">
-                <i class="fa-solid fa-user-shield"></i> Parceiro de Prestação de Contas
-            </h3>
+        <!-- CONTEÚDO ABA 3: CONFIGURAR MENTOR DE EMERGÊNCIA (ABERTO VIA AÇÕES RÁPIDAS) -->
+        <div v-show="abaAtiva === 'config'" class="card-glass p-6 rounded-3xl space-y-5">
+            <div class="flex justify-between items-center">
+                <h3 class="text-base font-extrabold text-fng-accent flex items-center gap-2.5 uppercase tracking-wider">
+                    <i class="fa-solid fa-user-shield"></i> Parceiro de Luta
+                </h3>
+                <button @click="abaAtiva = 'hoje'" class="text-slate-500 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
             <p class="text-xs text-slate-300 leading-relaxed">
-                Cadastre o WhatsApp de um irmão na fé ou mentor confiável. Ao acionar a emergência, você poderá mandar uma mensagem de socorro com 1 clique.
+                Ter um parceiro de prestação de contas é crucial para a libertação (Tiago 5:16). Cadastre o WhatsApp de um irmão maduro na fé ou mentor confiável. Ao acionar a emergência, você poderá enviar um pedido de socorro com um clique.
             </p>
             <div class="space-y-2">
-                <label class="block text-xs text-slate-400 font-semibold">Número do WhatsApp (com DDD):</label>
-                <input v-model="numeroMentor" type="text" placeholder="Ex: 51999999999" class="w-full p-2.5 rounded-xl bg-slate-900 border border-slate-700 text-xs text-slate-100 focus:border-amber-500">
+                <label class="block text-xs text-slate-400 font-semibold tracking-wide">Número do WhatsApp (com DDD, ex: 51999999999):</label>
+                <input v-model="numeroMentor" type="text" placeholder="Ex: 51999999999" class="w-full p-3.5 rounded-xl bg-fng-dark border border-slate-700 text-xs text-white placeholder:text-slate-600 focus:border-fng-accent focus:ring-1 focus:ring-fng-accent">
             </div>
-            <button @click="salvarMentor" class="w-full py-2.5 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-xl text-xs transition">
+            <button @click="salvarMentor" class="w-full py-3.5 btn-gold text-white font-extrabold rounded-xl text-xs uppercase tracking-widest transition">
                 Salvar Mentor
             </button>
         </div>
 
         <!-- MODAL TELA DE EMERGÊNCIA (SOCORRO AGUDO) -->
-        <div v-if="modalEmergencia" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md z-50 p-6 flex flex-col justify-between overflow-y-auto">
-            <div class="space-y-5 max-w-sm mx-auto text-center my-auto">
-                <div class="w-16 h-16 bg-rose-600/20 text-rose-400 border border-rose-500/40 rounded-full flex items-center justify-center mx-auto text-2xl animate-pulse">
+        <div v-if="modalEmergencia" class="fixed inset-0 z-50 p-6 flex flex-col items-center justify-center">
+            <!-- Fundo embaçado específico do modal -->
+            <div class="fixed inset-0 bg-slate-950/90 backdrop-blur-xl z-0"></div>
+            
+            <div class="relative z-10 card-glass p-8 rounded-3xl space-y-6 max-w-sm text-center border-2 border-rose-600/40">
+                <div class="w-16 h-16 bg-rose-600/10 text-rose-400 border border-rose-500/30 rounded-full flex items-center justify-center mx-auto text-3xl animate-pulse-red">
                     <i class="fa-solid fa-person-running"></i>
                 </div>
                 
-                <h2 class="text-lg font-bold text-rose-300 uppercase tracking-wider">PARE AGORA! FUJA DO PECADO</h2>
-                <p class="text-xs text-slate-300 leading-relaxed">
-                    "Fugi da imoralidade sexual." (1 Coríntios 6:18). Não negocie com a tentação. Saia do ambiente atual imediatamente.
+                <h2 class="text-xl font-black text-rose-300 uppercase tracking-tighter">PARE AGORA! NÃO CEDA.</h2>
+                <p class="text-xs text-slate-200 leading-relaxed font-medium bg-rose-950/40 p-3 rounded-lg border border-rose-800/30">
+                    "Fugi da imoralidade sexual." (1 Coríntios 6:18). Saia do ambiente atual, desligue a tela, mude o foco IMEDIATAMENTE.
                 </p>
 
                 <!-- BOTÃO DE CHAMADA/WHATSAPP AO MENTOR -->
-                <button v-if="numeroMentor" @click="chamarMentor" class="w-full py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl text-xs flex items-center justify-center gap-2 shadow-lg">
-                    <i class="fa-brands fa-whatsapp text-base"></i> Mandar Socorro ao Mentor
+                <button v-if="numeroMentor" @click="chamarMentor" class="w-full py-4 bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold rounded-xl text-xs uppercase tracking-widest flex items-center justify-center gap-2.5 shadow-xl transition active:scale-95">
+                    <i class="fa-brands fa-whatsapp text-lg"></i> Enviar Socorro ao Mentor
                 </button>
 
                 <!-- VERSÍCULO DE CONTRA-ATAQUE -->
-                <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl text-left space-y-2">
-                    <span class="text-[10px] font-bold text-amber-400 uppercase">Sua Arma Agora:</span>
-                    <blockquote class="text-xs text-slate-200 italic">
+                <div class="bg-fng-dark border border-slate-800 p-5 rounded-xl text-left space-y-2.5 shadow-inner">
+                    <span class="text-[10px] font-black text-fng-accent uppercase tracking-widest bg-fng-accent/10 py-1 px-3 rounded-full">Sua Arma Agora:</span>
+                    <blockquote class="text-xs text-slate-100 italic leading-relaxed">
                         "Não vos sobreveio tentação que não fosse humana; mas fiel é Deus, que não vos deixará tentar além do que podeis suportar."
                     </blockquote>
                     <span class="block text-right text-[10px] font-bold text-slate-400">— 1 Coríntios 10:13</span>
                 </div>
 
                 <!-- ORAÇÃO RÁPIDA -->
-                <div class="bg-slate-900/60 p-3 rounded-xl border border-slate-800 text-left text-xs text-slate-300">
-                    <strong class="text-amber-400">Ore assim agora:</strong>
-                    <p class="italic mt-1">"Senhor, entrego minha mente a Ti. Tu és mais desejável do que o pecado. Livra-me do mal. Amém."</p>
+                <div class="p-3.5 rounded-xl text-left text-xs text-slate-300 font-medium">
+                    <strong class="text-fng-accent">Ore assim:</strong>
+                    <p class="italic mt-1">"Senhor Jesus, entrego minha mente e corpo a Ti. Livra-me do mal. Amém."</p>
                 </div>
+                
+                <button @click="modalEmergencia = false" class="w-full py-3 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold rounded-xl text-xs uppercase tracking-wider border border-slate-700">
+                    A Tentação Passou / Voltar
+                </button>
             </div>
-
-            <button @click="modalEmergencia = false" class="w-full py-3 bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold rounded-xl text-xs uppercase tracking-wider border border-slate-700 mt-4">
-                A Tentação Passou / Voltar
-            </button>
         </div>
 
     </div>
@@ -182,31 +253,31 @@
                 const devocionais = ref([
                     {
                         titulo: "1. O Veneno da Pornografia e a Restauração",
-                        conteudo: "A pornografia deforma a visão sagrada do casamento e reduz seres humanos a objetos. Em Cristo, nossos olhos são purificados para ver a dignidade das pessoas com pureza de coração.",
+                        conteudo: "A pornografia deforma a visão sagrada do casamento e reduz seres humanos a objetos de prazer. Em Cristo, nossos olhos são purificados para ver a dignidade das pessoas com pureza de coração.",
                         referencia: "Mateus 5:28"
                     },
                     {
                         titulo: "2. A Graça que Ensina a Dizer Não",
-                        conteudo: "A graça de Deus não é licença para pecar, mas poder para renunciar à impiedade e às paixões mundanas, vivendo de forma sóbria, justa e piedosa.",
+                        conteudo: "A graça de Deus não é licença para pecar, mas poder para renunciar à impiedade e às paixões mundanas, vivendo de forma sóbria, justa e piedosa neste século.",
                         referencia: "Tito 2:11-12"
                     },
                     {
                         titulo: "3. A Importância da Luz e da Confissão",
-                        conteudo: "O pecado cresce nas sombras e no segredo. Quando confessamos nossas lutas a Deus e a um irmão maduro na fé, o poder da vergonha é quebrado.",
+                        conteudo: "O pecado cresce nas sombras e no segredo. Quando confessamos nossas lutas a Deus e a um irmão maduro na fé, o poder da vergonha é quebrado e a cura começa.",
                         referencia: "Tiago 5:16"
                     }
                 ]);
 
                 onMounted(() => {
-                    const dataSalva = localStorage.getItem('dataInicioCaminhada');
+                    const dataSalva = localStorage.getItem('dataInicioCaminhada_v1');
                     if (dataSalva) {
                         dataInicio.value = new Date(dataSalva);
                     } else {
                         dataInicio.value = new Date();
-                        localStorage.setItem('dataInicioCaminhada', dataInicio.value.toISOString());
+                        localStorage.setItem('dataInicioCaminhada_v1', dataInicio.value.toISOString());
                     }
 
-                    const mentorSalvo = localStorage.getItem('numeroMentor');
+                    const mentorSalvo = localStorage.getItem('numeroMentor_v1');
                     if (mentorSalvo) numeroMentor.value = mentorSalvo;
                 });
 
@@ -221,9 +292,9 @@
                 const horasDeVitoria = computed(() => horasTotais.value);
 
                 const reiniciarCaminhada = () => {
-                    if (confirm("Em Cristo há sempre perdão e restauração (1 João 1:9). Deseja recomeçar a contagem hoje?")) {
+                    if (confirm("Em Cristo há sempre perdão e restauração (1 João 1:9). Deseja recomeçar a contagem e iniciar uma nova caminhada limpa?")) {
                         dataInicio.value = new Date();
-                        localStorage.setItem('dataInicioCaminhada', dataInicio.value.toISOString());
+                        localStorage.setItem('dataInicioCaminhada_v1', dataInicio.value.toISOString());
                     }
                 };
 
@@ -232,12 +303,17 @@
                 };
 
                 const salvarMentor = () => {
-                    localStorage.setItem('numeroMentor', numeroMentor.value.trim());
-                    alert('Número do mentor salvo com sucesso!');
+                    if (numeroMentor.value.length < 10) {
+                        alert('Por favor, insira um número válido com DDD.');
+                        return;
+                    }
+                    localStorage.setItem('numeroMentor_v1', numeroMentor.value.trim());
+                    alert('Contato do mentor salvo com sucesso!');
+                    abaAtiva.value = 'hoje'; // Volta para a tela principal
                 };
 
                 const chamarMentor = () => {
-                    const msg = encodeURIComponent("Irmão, estou enfrentando uma forte tentação agora no app e preciso de oração e apoio.");
+                    const msg = encodeURIComponent("Irmão, estou enfrentando uma forte tentação agora através do app Firmes na Graça e preciso de oração e apoio imediato. Pode falar?");
                     window.open(`https://wa.me/${numeroMentor.value}?text=${msg}`, '_blank');
                 };
 
