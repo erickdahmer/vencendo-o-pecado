@@ -29,7 +29,6 @@
             padding: 0;
             min-height: 100vh;
             color: #f8fafc;
-            /* IMAGEM DE FUNDO: Leão e Ovelha */
             background-image: url('https://images.unsplash.com/photo-1546182990-dffeafbe841d?q=80&w=2070&auto=format&fit=crop');
             background-size: cover;
             background-position: center;
@@ -38,11 +37,10 @@
         }
 
         .overlay-bg {
-            background: radial-gradient(circle at center, rgba(10, 15, 30, 0.78) 0%, rgba(5, 8, 16, 0.92) 100%);
-            backdrop-filter: blur(10px);
+            background: radial-gradient(circle at center, rgba(10, 15, 30, 0.82) 0%, rgba(5, 8, 16, 0.94) 100%);
+            backdrop-filter: blur(12px);
         }
 
-        /* Card do Logo identico ao ícone do App */
         .app-icon-glass {
             background: linear-gradient(145deg, rgba(30, 42, 68, 0.7) 0%, rgba(15, 22, 38, 0.8) 100%);
             border: 1px solid rgba(255, 255, 255, 0.12);
@@ -80,11 +78,9 @@
     <div id="app" class="relative z-10 max-w-md mx-auto p-4 md:p-6 pb-28 min-h-screen flex flex-col justify-between">
 
         <div class="space-y-6">
-            <!-- CABEÇALHO LUME COM O LOGO EXATO DA IMAGEM -->
+            <!-- CABEÇALHO LUME -->
             <header class="text-center space-y-3 pt-4">
-                <!-- Card do Ícone Apple-style -->
                 <div class="inline-flex items-center justify-center w-24 h-24 rounded-3xl app-icon-glass shadow-2xl relative overflow-hidden my-1">
-                    <!-- SVG Exato do Logo Lume (Prisma e Cruz em Espaço Negativo) -->
                     <svg class="w-14 h-14 drop-shadow-[0_0_12px_rgba(234,179,8,0.7)]" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <defs>
                             <linearGradient id="lume-gold-grad" x1="10" y1="10" x2="90" y2="90" gradientUnits="userSpaceOnUse">
@@ -93,13 +89,7 @@
                                 <stop offset="100%" stop-color="#CA8A04"/>
                             </linearGradient>
                         </defs>
-                        <!-- Prisma exterior com recorte da cruz -->
-                        <path d="M50 12 L82 78 C70 72 60 70 50 78 C40 70 30 72 18 78 L50 12 Z" 
-                              fill="none" 
-                              stroke="url(#lume-gold-grad)" 
-                              stroke-width="5" 
-                              stroke-linejoin="round"/>
-                        <!-- Tracos internos formando a cruz refinada -->
+                        <path d="M50 12 L82 78 C70 72 60 70 50 78 C40 70 30 72 18 78 L50 12 Z" fill="none" stroke="url(#lume-gold-grad)" stroke-width="5" stroke-linejoin="round"/>
                         <path d="M50 22 V72" stroke="url(#lume-gold-grad)" stroke-width="4.5" stroke-linecap="round"/>
                         <path d="M30 48 H70" stroke="url(#lume-gold-grad)" stroke-width="4.5" stroke-linecap="round"/>
                     </svg>
@@ -117,7 +107,7 @@
                 </div>
             </header>
 
-            <!-- ABA ATIVA 1: INÍCIO / HOME -->
+            <!-- ABA 1: INÍCIO / HOME -->
             <div v-show="abaAtiva === 'home'" class="space-y-5">
                 <!-- CONTADOR DE DIAS -->
                 <div class="card-glass p-7 rounded-3xl text-center space-y-3 relative overflow-hidden">
@@ -132,7 +122,15 @@
                         <i class="fa-solid fa-shield-cat mr-1.5 animate-pulse"></i> {{ horasDeVitoria }} horas acumuladas em domínio próprio
                     </p>
 
-                    <div class="pt-3 border-t border-white/5 flex justify-center items-center text-xs text-slate-400">
+                    <!-- CONQUISTAS / MEDALHAS -->
+                    <div class="pt-3 border-t border-white/10 grid grid-cols-4 gap-2 text-center">
+                        <div v-for="m in medalhas" :key="m.dias" :class="diasDeVitoria >= m.dias ? 'opacity-100 text-amber-400' : 'opacity-30 text-slate-500'" class="flex flex-col items-center">
+                            <i :class="m.icone" class="text-lg mb-1"></i>
+                            <span class="text-[9px] font-bold uppercase">{{ m.dias }}d</span>
+                        </div>
+                    </div>
+
+                    <div class="pt-2 border-t border-white/5 flex justify-center items-center text-xs text-slate-400">
                         <button @click="reiniciarCaminhada" class="hover:text-rose-400 transition flex items-center gap-1.5">
                             <i class="fa-solid fa-rotate-left"></i> Recomeçar (Confissão e Restauração)
                         </button>
@@ -145,45 +143,51 @@
                         <i class="fa-solid fa-shield-halved"></i>
                     </div>
                     <div>
-                        <h3 class="font-bold text-rose-300 text-sm">Modo Emergência (Socorro)</h3>
-                        <p class="text-[11px] text-slate-400">Gatilhos agudos? Pausa imediata e resgate.</p>
+                        <h3 class="font-bold text-rose-300 text-sm">Modo Emergência (Pausa de Socorro)</h3>
+                        <p class="text-[11px] text-slate-400">Gatilhos agudos de Reels/+18? Clique para socorro imediato.</p>
                     </div>
                 </button>
 
-                <!-- PALAVRA DO DIA -->
-                <div class="card-glass p-6 rounded-3xl space-y-3">
-                    <div class="flex items-center gap-2 text-amber-400 text-xs font-bold uppercase tracking-widest">
-                        <i class="fa-solid fa-scroll"></i> PALAVRA DE VENCEDOR
+                <!-- REGISTRO RÁPIDO DE GATILHO -->
+                <div class="card-glass p-5 rounded-3xl space-y-3">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-xs font-bold text-amber-400 uppercase tracking-wider flex items-center gap-2">
+                            <i class="fa-solid fa-brain"></i> Registrar Sentimento de Tentação
+                        </h3>
                     </div>
-                    <blockquote class="text-sm text-slate-100 italic border-l-4 border-amber-500 pl-4 py-1 leading-relaxed font-medium">
-                        "Fugi da imoralidade sexual. Qualquer outro pecado que o homem comete é fora do corpo; mas o que se prostitui peca contra o seu próprio corpo."
-                    </blockquote>
-                    <span class="block text-right text-xs font-bold text-slate-300">— 1 Coríntios 6:18</span>
+                    <p class="text-[11px] text-slate-300">O que causou o impulso recente?</p>
+                    <div class="grid grid-cols-3 gap-2">
+                        <button v-for="sent in sentimentos" :key="sent" @click="registrarGatilho(sent)" class="py-2 px-1 bg-slate-800/80 hover:bg-amber-500/20 hover:text-amber-300 border border-slate-700/60 rounded-xl text-[10px] font-semibold text-slate-300 transition">
+                            {{ sent }}
+                        </button>
+                    </div>
+                    <p v-if="ultimoGatilho" class="text-[10px] text-slate-400 italic text-right pt-1">Último registro: {{ ultimoGatilho }}</p>
                 </div>
             </div>
 
-            <!-- ABA ATIVA 2: FOCO -->
+            <!-- ABA 2: FOCO / DESAFIO 21 DIAS -->
             <div v-show="abaAtiva === 'foco'" class="space-y-4">
                 <div class="card-glass p-6 rounded-3xl space-y-3">
                     <div class="flex items-center gap-2 text-amber-400 text-xs font-bold uppercase tracking-widest">
-                        <i class="fa-solid fa-bullseye"></i> Escudo Contra o Feed do Instagram
+                        <i class="fa-solid fa-bullseye"></i> Desafio 21D: Desintoxicação Digital
                     </div>
                     <p class="text-xs text-slate-200 leading-relaxed">
-                        O cérebro busca dopamina barata no Reels. Quando sentir o impulso de buscar conteúdos inapropriados, aplique a regra dos 90 segundos: mude de ambiente, respire fundo e feche os olhos.
+                        Reduza a hiperestimulação do cérebro desarmando os gatilhos diários de redes sociais e navegadores.
                     </p>
                 </div>
 
-                <div class="card-glass p-6 rounded-3xl space-y-3">
-                    <h3 class="text-sm font-bold text-amber-400 uppercase tracking-wider">Passos Práticos de Pureza</h3>
-                    <ul class="text-xs text-slate-300 space-y-2 list-disc list-inside">
-                        <li>Não leve o celular para o quarto na hora de dormir.</li>
-                        <li>Desative notificações de vídeos curtos após as 21h.</li>
-                        <li>Substitua a ansiedade por uma oração curta imediata.</li>
-                    </ul>
+                <div class="card-glass p-5 rounded-3xl space-y-3">
+                    <h3 class="text-xs font-bold text-slate-300 uppercase tracking-wider">Checklist de Hábitos de Pureza</h3>
+                    <div class="space-y-2.5">
+                        <label v-for="(task, idx) in tarefasDesafio" :key="idx" class="flex items-start gap-3 p-3 bg-slate-900/40 rounded-xl border border-white/5 cursor-pointer hover:bg-slate-800/50 transition">
+                            <input type="checkbox" v-model="task.concluida" @change="salvarTarefas" class="mt-0.5 accent-amber-500 rounded w-4 h-4">
+                            <span :class="task.concluida ? 'line-through text-slate-500' : 'text-slate-200'" class="text-xs leading-relaxed">{{ task.texto }}</span>
+                        </label>
+                    </div>
                 </div>
             </div>
 
-            <!-- ABA ATIVA 3: ESTUDOS / DEVOCIONAIS -->
+            <!-- ABA 3: ESTUDOS / DEVOCIONAIS -->
             <div v-show="abaAtiva === 'devocional'" class="space-y-4">
                 <div v-for="(dev, idx) in devocionais" :key="idx" class="card-glass p-6 rounded-3xl space-y-2.5">
                     <span class="text-[10px] font-black text-amber-400 uppercase tracking-widest bg-amber-500/10 py-1 px-3 rounded-full border border-amber-500/20">Estudo {{ idx + 1 }}</span>
@@ -195,13 +199,13 @@
                 </div>
             </div>
 
-            <!-- ABA ATIVA 4: MENTOR -->
+            <!-- ABA 4: MENTOR -->
             <div v-show="abaAtiva === 'config'" class="card-glass p-6 rounded-3xl space-y-4">
                 <h3 class="text-base font-extrabold text-amber-400 flex items-center gap-2 uppercase tracking-wider">
                     <i class="fa-solid fa-user-shield"></i> Parceiro de Fé
                 </h3>
                 <p class="text-xs text-slate-300 leading-relaxed">
-                    Cadastre o WhatsApp de um mentor ou irmão maduro. No momento de perigo, o app gera um pedido de socorro com um clique.
+                    Cadastre o WhatsApp de um mentor ou irmão maduro. No momento de emergência, você pode acionar um pedido de socorro direto.
                 </p>
                 <div class="space-y-2">
                     <label class="block text-xs text-slate-400 font-semibold">Número do WhatsApp (com DDD):</label>
@@ -216,30 +220,25 @@
         <!-- BARRA DE NAVEGAÇÃO INFERIOR -->
         <nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto p-3 z-40">
             <div class="card-glass rounded-2xl p-2 flex justify-around items-center border border-white/10 shadow-2xl backdrop-blur-2xl">
-                <!-- Ícone 1: Início -->
                 <button @click="abaAtiva = 'home'" :class="abaAtiva === 'home' ? 'text-amber-400 bg-amber-500/10' : 'text-slate-400 hover:text-white'" class="flex flex-col items-center py-1.5 px-3 rounded-xl transition">
                     <i class="fa-solid fa-house text-base"></i>
                     <span class="text-[10px] mt-1 font-medium">Início</span>
                 </button>
 
-                <!-- Ícone 2: Foco -->
                 <button @click="abaAtiva = 'foco'" :class="abaAtiva === 'foco' ? 'text-amber-400 bg-amber-500/10' : 'text-slate-400 hover:text-white'" class="flex flex-col items-center py-1.5 px-3 rounded-xl transition">
                     <i class="fa-solid fa-shield text-base"></i>
                     <span class="text-[10px] mt-1 font-medium">Foco</span>
                 </button>
 
-                <!-- Botão Central de Emergência -->
                 <button @click="abrirEmergencia" class="w-12 h-12 rounded-2xl btn-gold text-lume-dark flex items-center justify-center shadow-lg -mt-4 border-2 border-lume-dark active:scale-90 transition">
                     <i class="fa-solid fa-sun text-lg text-slate-950"></i>
                 </button>
 
-                <!-- Ícone 3: Estudos -->
                 <button @click="abaAtiva = 'devocional'" :class="abaAtiva === 'devocional' ? 'text-amber-400 bg-amber-500/10' : 'text-slate-400 hover:text-white'" class="flex flex-col items-center py-1.5 px-3 rounded-xl transition">
                     <i class="fa-solid fa-book-bible text-base"></i>
                     <span class="text-[10px] mt-1 font-medium">Estudos</span>
                 </button>
 
-                <!-- Ícone 4: Mentor -->
                 <button @click="abaAtiva = 'config'" :class="abaAtiva === 'config' ? 'text-amber-400 bg-amber-500/10' : 'text-slate-400 hover:text-white'" class="flex flex-col items-center py-1.5 px-3 rounded-xl transition">
                     <i class="fa-solid fa-user-gear text-base"></i>
                     <span class="text-[10px] mt-1 font-medium">Mentor</span>
@@ -247,22 +246,28 @@
             </div>
         </nav>
 
-        <!-- MODAL MODO EMERGÊNCIA -->
+        <!-- MODAL MODO EMERGÊNCIA COM PAUSA DE RESPIRAÇÃO (30 SEGUNDOS) -->
         <div v-if="modalEmergencia" class="fixed inset-0 z-50 p-6 flex flex-col items-center justify-center">
             <div class="fixed inset-0 bg-slate-950/90 backdrop-blur-xl z-0"></div>
             
             <div class="relative z-10 card-glass p-8 rounded-3xl space-y-5 max-w-sm text-center border-2 border-rose-600/40">
                 <div class="w-16 h-16 bg-rose-600/10 text-rose-400 border border-rose-500/30 rounded-full flex items-center justify-center mx-auto text-3xl animate-pulse-red">
-                    <i class="fa-solid fa-person-running"></i>
+                    <i class="fa-solid fa-stopwatch"></i>
                 </div>
                 
-                <h2 class="text-lg font-black text-rose-300 uppercase tracking-tighter">PARE E DESLIGUE A TELA</h2>
-                <p class="text-xs text-slate-200 leading-relaxed font-medium bg-rose-950/40 p-3 rounded-xl border border-rose-800/30">
-                    O impulso físico da tentação atinge o pico em instantes. Saia do aplicativo atual, levante-se e mude o ambiente agora!
-                </p>
+                <h2 class="text-lg font-black text-rose-300 uppercase tracking-tighter">PAUSA CONSCIENTE (PARE AGORA)</h2>
+                
+                <!-- TIMER REGRESSIVO DE RESPIRAÇÃO -->
+                <div v-if="tempoRestante > 0" class="p-4 bg-slate-900/80 rounded-2xl border border-rose-500/30 space-y-2">
+                    <span class="text-3xl font-black text-amber-400">{{ tempoRestante }}s</span>
+                    <p class="text-[11px] text-slate-300">Respire fundo. Desligue a tela ou mude de ambiente fisicamente agora.</p>
+                </div>
+                <div v-else class="p-3 bg-emerald-950/60 rounded-xl border border-emerald-500/30 text-xs text-emerald-300 font-semibold">
+                    A onda do primeiro impulso passou. Você está no controle sob a Graça.
+                </div>
 
-                <button v-if="numeroMentor" @click="chamarMentor" class="w-full py-3.5 bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold rounded-xl text-xs uppercase tracking-widest flex items-center justify-center gap-2 shadow-xl transition">
-                    <i class="fa-brands fa-whatsapp text-lg"></i> Pedir Socorro ao Mentor
+                <button v-if="numeroMentor" :disabled="tempoRestante > 0" @click="chamarMentor" :class="tempoRestante > 0 ? 'opacity-40 cursor-not-allowed bg-slate-700' : 'bg-emerald-600 hover:bg-emerald-500'" class="w-full py-3.5 text-white font-extrabold rounded-xl text-xs uppercase tracking-widest flex items-center justify-center gap-2 shadow-xl transition">
+                    <i class="fa-brands fa-whatsapp text-lg"></i> {{ tempoRestante > 0 ? `Aguarde ${tempoRestante}s para acionar mentor` : 'Pedir Socorro ao Mentor' }}
                 </button>
 
                 <div class="bg-lume-dark border border-slate-800 p-4 rounded-xl text-left space-y-2">
@@ -272,7 +277,7 @@
                     </blockquote>
                 </div>
 
-                <button @click="modalEmergencia = false" class="w-full py-3 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold rounded-xl text-xs uppercase tracking-wider border border-slate-700">
+                <button @click="fecharEmergencia" class="w-full py-3 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold rounded-xl text-xs uppercase tracking-wider border border-slate-700">
                     A Tentação Passou / Voltar
                 </button>
             </div>
@@ -289,6 +294,25 @@
                 const dataInicio = ref(null);
                 const modalEmergencia = ref(false);
                 const numeroMentor = ref('');
+                const tempoRestante = ref(30);
+                let intervalTimer = null;
+
+                const sentimentos = ref(['Tédio', 'Ansiedade', 'Cansaço', 'Solidão', 'Estresse', 'Madrugada']);
+                const ultimoGatilho = ref('');
+
+                const medalhas = ref([
+                    { dias: 3, icone: 'fa-solid fa-seedling' },
+                    { dias: 7, icone: 'fa-solid fa-shield-halved' },
+                    { dias: 14, icone: 'fa-solid fa-eye' },
+                    { dias: 30, icone: 'fa-solid fa-crown' }
+                ]);
+
+                const tarefasDesafio = ref([
+                    { texto: 'Não levar o celular para o banheiro ou para a cama.', concluida: false },
+                    { texto: 'Desativar notificações de redes sociais após as 21h.', concluida: false },
+                    { texto: 'Trocar os primeiros 15 min do dia por devocional em vez de Reels.', concluida: false },
+                    { texto: 'Deixar o celular carregando longe do alcance das mãos ao dormir.', concluida: false }
+                ]);
 
                 const devocionais = ref([
                     {
@@ -309,16 +333,22 @@
                 ]);
 
                 onMounted(() => {
-                    const dataSalva = localStorage.getItem('dataInicioCaminhada_lume_v3');
+                    const dataSalva = localStorage.getItem('dataInicioCaminhada_lume_v4');
                     if (dataSalva) {
                         dataInicio.value = new Date(dataSalva);
                     } else {
                         dataInicio.value = new Date();
-                        localStorage.setItem('dataInicioCaminhada_lume_v3', dataInicio.value.toISOString());
+                        localStorage.setItem('dataInicioCaminhada_lume_v4', dataInicio.value.toISOString());
                     }
 
-                    const mentorSalvo = localStorage.getItem('numeroMentor_lume_v3');
+                    const mentorSalvo = localStorage.getItem('numeroMentor_lume_v4');
                     if (mentorSalvo) numeroMentor.value = mentorSalvo;
+
+                    const gatilhoSalvo = localStorage.getItem('ultimoGatilho_lume');
+                    if (gatilhoSalvo) ultimoGatilho.value = gatilhoSalvo;
+
+                    const tarefasSalvas = localStorage.getItem('tarefasDesafio_lume');
+                    if (tarefasSalvas) tarefasDesafio.value = JSON.parse(tarefasSalvas);
                 });
 
                 const horasTotais = computed(() => {
@@ -334,12 +364,37 @@
                 const reiniciarCaminhada = () => {
                     if (confirm("Em Cristo há perdão e restauração abundante. Deseja reiniciar sua contagem e iniciar uma nova jornada na luz?")) {
                         dataInicio.value = new Date();
-                        localStorage.setItem('dataInicioCaminhada_lume_v3', dataInicio.value.toISOString());
+                        localStorage.setItem('dataInicioCaminhada_lume_v4', dataInicio.value.toISOString());
                     }
                 };
 
                 const abrirEmergencia = () => {
                     modalEmergencia.value = true;
+                    tempoRestante.value = 30;
+                    if (intervalTimer) clearInterval(intervalTimer);
+                    intervalTimer = setInterval(() => {
+                        if (tempoRestante.value > 0) {
+                            tempoRestante.value--;
+                        } else {
+                            clearInterval(intervalTimer);
+                        }
+                    }, 1000);
+                };
+
+                const fecharEmergencia = () => {
+                    modalEmergencia.value = false;
+                    if (intervalTimer) clearInterval(intervalTimer);
+                };
+
+                const registrarGatilho = (sentimento) => {
+                    const dataHora = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                    ultimoGatilho.value = `${sentimento} às ${dataHora}`;
+                    localStorage.setItem('ultimoGatilho_lume', ultimoGatilho.value);
+                    alert(`Gatilho de ${sentimento} registrado! Identificar a causa é o primeiro passo para vencer.`);
+                };
+
+                const salvarTarefas = () => {
+                    localStorage.setItem('tarefasDesafio_lume', JSON.stringify(tarefasDesafio.value));
                 };
 
                 const salvarMentor = () => {
@@ -347,7 +402,7 @@
                         alert('Por favor, insira um número válido com DDD.');
                         return;
                     }
-                    localStorage.setItem('numeroMentor_lume_v3', numeroMentor.value.trim());
+                    localStorage.setItem('numeroMentor_lume_v4', numeroMentor.value.trim());
                     alert('Parceiro salvo com sucesso!');
                     abaAtiva.value = 'home';
                 };
@@ -359,7 +414,9 @@
 
                 return {
                     abaAtiva, diasDeVitoria, horasDeVitoria, modalEmergencia, numeroMentor,
-                    devocionais, reiniciarCaminhada, abrirEmergencia, salvarMentor, chamarMentor
+                    tempoRestante, sentimentos, ultimoGatilho, medalhas, tarefasDesafio,
+                    devocionais, reiniciarCaminhada, abrirEmergencia, fecharEmergencia,
+                    registrarGatilho, salvarTarefas, salvarMentor, chamarMentor
                 };
             }
         }).mount('#app');
