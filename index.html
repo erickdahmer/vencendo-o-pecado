@@ -76,6 +76,13 @@
         .animate-pulse-red {
             animation: pulse-red 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
         }
+
+        .bible-frame {
+            width: 100%;
+            height: calc(100vh - 220px);
+            border-radius: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
     </style>
 </head>
 <body class="relative">
@@ -182,31 +189,28 @@
                 </div>
             </div>
 
-            <!-- ABA 2: FOCO / DESAFIO 21 DIAS -->
-            <div v-show="abaAtiva === 'foco'" class="space-y-4">
-                <div class="card-glass p-6 rounded-3xl space-y-3">
+            <!-- ABA 2: BÍBLIA SAGRADA INTEGRADA (ACF / NVI) -->
+            <div v-show="abaAtiva === 'biblia'" class="space-y-3">
+                <div class="card-glass p-4 rounded-2xl flex items-center justify-between">
                     <div class="flex items-center gap-2 text-amber-400 text-xs font-bold uppercase tracking-widest">
-                        <i class="fa-solid fa-bullseye"></i> Desafio 21D: Desintoxicação Digital
+                        <i class="fa-solid fa-book-bible text-base"></i> Bíblia Sagrada (Almeida ACF)
                     </div>
-                    <p class="text-xs text-slate-200 leading-relaxed">
-                        Reduza a hiperestimulação do cérebro desarmando os gatilhos diários de redes sociais e navegadores.
-                    </p>
+                    <span class="text-[10px] font-bold text-slate-400 bg-slate-800/80 px-2.5 py-1 rounded-full border border-slate-700">Leitura Contínua</span>
                 </div>
 
-                <div class="card-glass p-5 rounded-3xl space-y-3">
-                    <h3 class="text-xs font-bold text-slate-300 uppercase tracking-wider">Checklist de Hábitos de Pureza</h3>
-                    <div class="space-y-2.5">
-                        <label v-for="(task, idx) in tarefasDesafio" :key="idx" class="flex items-start gap-3 p-3 bg-slate-900/40 rounded-xl border border-white/5 cursor-pointer hover:bg-slate-800/50 transition">
-                            <input type="checkbox" v-model="task.concluida" @change="salvarTarefas" class="mt-0.5 accent-amber-500 rounded w-4 h-4">
-                            <span :class="task.concluida ? 'line-through text-slate-500' : 'text-slate-200'" class="text-xs leading-relaxed">{{ task.texto }}</span>
-                        </label>
-                    </div>
+                <!-- LEITOR BÍBLICO EMBUTIDO DENTRO DO APP -->
+                <div class="card-glass rounded-3xl overflow-hidden p-1 shadow-2xl">
+                    <iframe 
+                        src="https://www.bibliaonline.com.br/acf" 
+                        class="bible-frame" 
+                        title="Bíblia Sagrada ACF"
+                        loading="lazy">
+                    </iframe>
                 </div>
             </div>
 
-            <!-- ABA 3: TRILHA DE ESTUDOS (REFORMULADA COM MICROLEARNING) -->
+            <!-- ABA 3: TRILHA DE ESTUDOS -->
             <div v-show="abaAtiva === 'devocional'" class="space-y-4">
-                <!-- PAINEL DE PROGRESSO DOS ESTUDOS -->
                 <div class="card-glass p-5 rounded-3xl space-y-3">
                     <div class="flex items-center justify-between">
                         <div class="flex items-center gap-2 text-amber-400 text-xs font-bold uppercase tracking-widest">
@@ -214,13 +218,11 @@
                         </div>
                         <span class="text-xs font-black text-amber-300">{{ estudosConcluidosCount }} / {{ estudos.length }} lidos</span>
                     </div>
-                    <!-- Barra de progresso -->
                     <div class="w-full h-2.5 bg-slate-900 rounded-full overflow-hidden border border-white/10">
                         <div class="h-full bg-gradient-to-r from-amber-500 to-yellow-300 transition-all duration-500" :style="{ width: percentualEstudos + '%' }"></div>
                     </div>
                 </div>
 
-                <!-- FILTROS POR CATEGORIA -->
                 <div class="flex gap-2 overflow-x-auto pb-1 text-[11px] font-bold no-scrollbar">
                     <button @click="categoriaFiltro = 'todos'" :class="categoriaFiltro === 'todos' ? 'bg-amber-500 text-slate-950' : 'bg-slate-900/80 text-slate-300 border border-slate-700'" class="py-1.5 px-3 rounded-xl whitespace-nowrap transition">
                         Todos
@@ -236,7 +238,6 @@
                     </button>
                 </div>
 
-                <!-- LISTA DE CARD DE ESTUDOS -->
                 <div v-for="estudo in estudosFiltrados" :key="estudo.id" class="card-glass p-6 rounded-3xl space-y-3 relative overflow-hidden transition">
                     <div class="flex items-center justify-between text-[10px]">
                         <span class="font-black text-amber-400 uppercase tracking-widest bg-amber-500/10 py-1 px-3 rounded-full border border-amber-500/20">
@@ -249,7 +250,6 @@
                         {{ estudo.titulo }}
                     </h3>
 
-                    <!-- PONTOS PRÁTICOS (BULLET POINTS) -->
                     <div class="space-y-2 text-xs text-slate-200 leading-relaxed bg-slate-900/50 p-3.5 rounded-2xl border border-white/5">
                         <p v-for="(ponto, pIdx) in estudo.pontos" :key="pIdx" class="flex items-start gap-2">
                             <i class="fa-solid fa-chevron-right text-[10px] text-amber-400 mt-1 shrink-0"></i>
@@ -257,7 +257,6 @@
                         </p>
                     </div>
 
-                    <!-- REFLEXÃO BÍBLICA DE FECHAMENTO -->
                     <div class="pt-2 border-t border-white/5 flex items-center justify-between text-xs">
                         <span class="font-bold text-amber-400 italic">"{{ estudo.versiculo }}" — {{ estudo.referencia }}</span>
                         
@@ -287,17 +286,18 @@
             </div>
         </div>
 
-        <!-- BARRA DE NAVEGAÇÃO INFERIOR -->
+        <!-- BARRA DE NAVEGAÇÃO INFERIOR COM ÍCONE DA BÍBLIA -->
         <nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto p-3 z-40">
             <div class="card-glass rounded-2xl p-2 flex justify-around items-center border border-white/10 shadow-2xl backdrop-blur-2xl">
-                <button @click="abaAtiva = 'home'" :class="abaAtiva === 'home' ? 'text-amber-400 bg-amber-500/10' : 'text-slate-400 hover:text-white'" class="flex flex-col items-center py-1.5 px-3 rounded-xl transition">
+                <button @click="abaAtiva = 'home'" :class="abaAtiva === 'home' ? 'text-amber-400 bg-amber-500/10' : 'text-slate-400 hover:text-white'" class="flex flex-col items-center py-1.5 px-2.5 rounded-xl transition">
                     <i class="fa-solid fa-house text-base"></i>
                     <span class="text-[10px] mt-1 font-medium">Início</span>
                 </button>
 
-                <button @click="abaAtiva = 'foco'" :class="abaAtiva === 'foco' ? 'text-amber-400 bg-amber-500/10' : 'text-slate-400 hover:text-white'" class="flex flex-col items-center py-1.5 px-3 rounded-xl transition">
-                    <i class="fa-solid fa-shield text-base"></i>
-                    <span class="text-[10px] mt-1 font-medium">Foco</span>
+                <!-- ÍCONE BÍBLIA -->
+                <button @click="abaAtiva = 'biblia'" :class="abaAtiva === 'biblia' ? 'text-amber-400 bg-amber-500/10' : 'text-slate-400 hover:text-white'" class="flex flex-col items-center py-1.5 px-2.5 rounded-xl transition">
+                    <i class="fa-solid fa-book-bible text-base"></i>
+                    <span class="text-[10px] mt-1 font-medium">Bíblia</span>
                 </button>
 
                 <!-- BOTÃO CENTRAL DE EMERGÊNCIA -->
@@ -305,12 +305,12 @@
                     <i class="fa-solid fa-shield-halved text-lg"></i>
                 </button>
 
-                <button @click="abaAtiva = 'devocional'" :class="abaAtiva === 'devocional' ? 'text-amber-400 bg-amber-500/10' : 'text-slate-400 hover:text-white'" class="flex flex-col items-center py-1.5 px-3 rounded-xl transition">
+                <button @click="abaAtiva = 'devocional'" :class="abaAtiva === 'devocional' ? 'text-amber-400 bg-amber-500/10' : 'text-slate-400 hover:text-white'" class="flex flex-col items-center py-1.5 px-2.5 rounded-xl transition">
                     <i class="fa-solid fa-graduation-cap text-base"></i>
                     <span class="text-[10px] mt-1 font-medium">Estudos</span>
                 </button>
 
-                <button @click="abaAtiva = 'config'" :class="abaAtiva === 'config' ? 'text-amber-400 bg-amber-500/10' : 'text-slate-400 hover:text-white'" class="flex flex-col items-center py-1.5 px-3 rounded-xl transition">
+                <button @click="abaAtiva = 'config'" :class="abaAtiva === 'config' ? 'text-amber-400 bg-amber-500/10' : 'text-slate-400 hover:text-white'" class="flex flex-col items-center py-1.5 px-2.5 rounded-xl transition">
                     <i class="fa-solid fa-user-gear text-base"></i>
                     <span class="text-[10px] mt-1 font-medium">Mentor</span>
                 </button>
@@ -388,14 +388,6 @@
                     { dias: 30, icone: 'fa-solid fa-crown' }
                 ]);
 
-                const tarefasDesafio = ref([
-                    { texto: 'Não levar o celular para o banheiro ou para a cama.', concluida: false },
-                    { texto: 'Desativar notificações de redes sociais após as 21h.', concluida: false },
-                    { texto: 'Trocar os primeiros 15 min do dia por devocional em vez de Reels.', concluida: false },
-                    { texto: 'Deixar o celular carregando longe do alcance das mãos ao dormir.', concluida: false }
-                ]);
-
-                // ESTUDOS ESTRUTURADOS POR MÓDULOS E MICROLEARNING
                 const estudos = ref([
                     {
                         id: 1,
@@ -455,9 +447,6 @@
 
                     const gatilhoSalvo = localStorage.getItem('ultimoGatilho_lume_v2');
                     if (gatilhoSalvo) ultimoGatilho.value = gatilhoSalvo;
-
-                    const tarefasSalvas = localStorage.getItem('tarefasDesafio_lume');
-                    if (tarefasSalvas) tarefasDesafio.value = JSON.parse(tarefasSalvas);
 
                     const concluidosSalvos = localStorage.getItem('estudosConcluidos_lume');
                     if (concluidosSalvos) estudosConcluidos.value = JSON.parse(concluidosSalvos);
@@ -521,10 +510,6 @@
                     localStorage.setItem('ultimoGatilho_lume_v2', ultimoGatilho.value);
                 };
 
-                const salvarTarefas = () => {
-                    localStorage.setItem('tarefasDesafio_lume', JSON.stringify(tarefasDesafio.value));
-                };
-
                 const salvarMentor = () => {
                     if (numeroMentor.value.length < 10) {
                         alert('Por favor, insira um número válido com DDD.');
@@ -542,10 +527,10 @@
 
                 return {
                     abaAtiva, diasDeVitoria, horasDeVitoria, modalEmergencia, numeroMentor,
-                    tempoRestante, sentimentosComIcone, ultimoGatilho, medalhas, tarefasDesafio,
+                    tempoRestante, sentimentosComIcone, ultimoGatilho, medalhas,
                     estudos, categoriaFiltro, estudosFiltrados, estudosConcluidos, estudosConcluidosCount,
                     percentualEstudos, alternarConclusaoEstudo, reiniciarCaminhada, abrirEmergencia,
-                    fecharEmergencia, registrarGatilho, salvarTarefas, salvarMentor, chamarMentor
+                    fecharEmergencia, registrarGatilho, salvarMentor, chamarMentor
                 };
             }
         }).mount('#app');
