@@ -204,14 +204,67 @@
                 </div>
             </div>
 
-            <!-- ABA 3: ESTUDOS / DEVOCIONAIS -->
+            <!-- ABA 3: TRILHA DE ESTUDOS (REFORMULADA COM MICROLEARNING) -->
             <div v-show="abaAtiva === 'devocional'" class="space-y-4">
-                <div v-for="(dev, idx) in devocionais" :key="idx" class="card-glass p-6 rounded-3xl space-y-2.5">
-                    <span class="text-[10px] font-black text-amber-400 uppercase tracking-widest bg-amber-500/10 py-1 px-3 rounded-full border border-amber-500/20">Estudo {{ idx + 1 }}</span>
-                    <h3 class="text-base font-extrabold text-white tracking-tight">{{ dev.titulo }}</h3>
-                    <p class="text-xs text-slate-200 leading-relaxed">{{ dev.conteudo }}</p>
-                    <div class="pt-2 border-t border-white/5 text-right">
-                        <span class="text-xs font-bold text-amber-400">{{ dev.referencia }}</span>
+                <!-- PAINEL DE PROGRESSO DOS ESTUDOS -->
+                <div class="card-glass p-5 rounded-3xl space-y-3">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-2 text-amber-400 text-xs font-bold uppercase tracking-widest">
+                            <i class="fa-solid fa-graduation-cap text-base"></i> Trilha da Mente Renovada
+                        </div>
+                        <span class="text-xs font-black text-amber-300">{{ estudosConcluidosCount }} / {{ estudos.length }} lidos</span>
+                    </div>
+                    <!-- Barra de progresso -->
+                    <div class="w-full h-2.5 bg-slate-900 rounded-full overflow-hidden border border-white/10">
+                        <div class="h-full bg-gradient-to-r from-amber-500 to-yellow-300 transition-all duration-500" :style="{ width: percentualEstudos + '%' }"></div>
+                    </div>
+                </div>
+
+                <!-- FILTROS POR CATEGORIA -->
+                <div class="flex gap-2 overflow-x-auto pb-1 text-[11px] font-bold no-scrollbar">
+                    <button @click="categoriaFiltro = 'todos'" :class="categoriaFiltro === 'todos' ? 'bg-amber-500 text-slate-950' : 'bg-slate-900/80 text-slate-300 border border-slate-700'" class="py-1.5 px-3 rounded-xl whitespace-nowrap transition">
+                        Todos
+                    </button>
+                    <button @click="categoriaFiltro = 'neuro'" :class="categoriaFiltro === 'neuro' ? 'bg-amber-500 text-slate-950' : 'bg-slate-900/80 text-slate-300 border border-slate-700'" class="py-1.5 px-3 rounded-xl whitespace-nowrap transition">
+                        Neurociência & Hábitos
+                    </button>
+                    <button @click="categoriaFiltro = 'combate'" :class="categoriaFiltro === 'combate' ? 'bg-amber-500 text-slate-950' : 'bg-slate-900/80 text-slate-300 border border-slate-700'" class="py-1.5 px-3 rounded-xl whitespace-nowrap transition">
+                        Blindagem Digital
+                    </button>
+                    <button @click="categoriaFiltro = 'graca'" :class="categoriaFiltro === 'graca' ? 'bg-amber-500 text-slate-950' : 'bg-slate-900/80 text-slate-300 border border-slate-700'" class="py-1.5 px-3 rounded-xl whitespace-nowrap transition">
+                        Graça & Restauração
+                    </button>
+                </div>
+
+                <!-- LISTA DE CARD DE ESTUDOS -->
+                <div v-for="estudo in estudosFiltrados" :key="estudo.id" class="card-glass p-6 rounded-3xl space-y-3 relative overflow-hidden transition">
+                    <div class="flex items-center justify-between text-[10px]">
+                        <span class="font-black text-amber-400 uppercase tracking-widest bg-amber-500/10 py-1 px-3 rounded-full border border-amber-500/20">
+                            {{ estudo.modulo }}
+                        </span>
+                        <span class="text-slate-400 font-semibold"><i class="fa-regular fa-clock mr-1"></i>{{ estudo.tempoLeitura }}</span>
+                    </div>
+
+                    <h3 class="text-base font-extrabold text-white tracking-tight flex items-center gap-2">
+                        {{ estudo.titulo }}
+                    </h3>
+
+                    <!-- PONTOS PRÁTICOS (BULLET POINTS) -->
+                    <div class="space-y-2 text-xs text-slate-200 leading-relaxed bg-slate-900/50 p-3.5 rounded-2xl border border-white/5">
+                        <p v-for="(ponto, pIdx) in estudo.pontos" :key="pIdx" class="flex items-start gap-2">
+                            <i class="fa-solid fa-chevron-right text-[10px] text-amber-400 mt-1 shrink-0"></i>
+                            <span>{{ ponto }}</span>
+                        </p>
+                    </div>
+
+                    <!-- REFLEXÃO BÍBLICA DE FECHAMENTO -->
+                    <div class="pt-2 border-t border-white/5 flex items-center justify-between text-xs">
+                        <span class="font-bold text-amber-400 italic">"{{ estudo.versiculo }}" — {{ estudo.referencia }}</span>
+                        
+                        <button @click="alternarConclusaoEstudo(estudo.id)" :class="estudosConcluidos.includes(estudo.id) ? 'bg-emerald-600 text-white' : 'bg-slate-800 text-slate-300 border border-slate-700 hover:text-white'" class="py-1.5 px-3 rounded-xl font-bold text-[11px] flex items-center gap-1.5 transition">
+                            <i :class="estudosConcluidos.includes(estudo.id) ? 'fa-solid fa-circle-check' : 'fa-regular fa-circle'"></i>
+                            {{ estudosConcluidos.includes(estudo.id) ? 'Lido' : 'Marcar Lido' }}
+                        </button>
                     </div>
                 </div>
             </div>
@@ -234,7 +287,7 @@
             </div>
         </div>
 
-        <!-- BARRA DE NAVEGAÇÃO INFERIOR COM BOTÃO CENTRAL DE EMERGÊNCIA -->
+        <!-- BARRA DE NAVEGAÇÃO INFERIOR -->
         <nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto p-3 z-40">
             <div class="card-glass rounded-2xl p-2 flex justify-around items-center border border-white/10 shadow-2xl backdrop-blur-2xl">
                 <button @click="abaAtiva = 'home'" :class="abaAtiva === 'home' ? 'text-amber-400 bg-amber-500/10' : 'text-slate-400 hover:text-white'" class="flex flex-col items-center py-1.5 px-3 rounded-xl transition">
@@ -247,13 +300,13 @@
                     <span class="text-[10px] mt-1 font-medium">Foco</span>
                 </button>
 
-                <!-- BOTÃO CENTRAL DE EMERGÊNCIA PERMANENTE NO RODAPÉ -->
+                <!-- BOTÃO CENTRAL DE EMERGÊNCIA -->
                 <button @click="abrirEmergencia" class="w-12 h-12 rounded-2xl bg-rose-600 hover:bg-rose-500 text-white flex items-center justify-center shadow-lg -mt-4 border-2 border-lume-dark active:scale-90 transition shadow-rose-950/60">
                     <i class="fa-solid fa-shield-halved text-lg"></i>
                 </button>
 
                 <button @click="abaAtiva = 'devocional'" :class="abaAtiva === 'devocional' ? 'text-amber-400 bg-amber-500/10' : 'text-slate-400 hover:text-white'" class="flex flex-col items-center py-1.5 px-3 rounded-xl transition">
-                    <i class="fa-solid fa-book-bible text-base"></i>
+                    <i class="fa-solid fa-graduation-cap text-base"></i>
                     <span class="text-[10px] mt-1 font-medium">Estudos</span>
                 </button>
 
@@ -314,6 +367,9 @@
                 const tempoRestante = ref(30);
                 let intervalTimer = null;
 
+                const categoriaFiltro = ref('todos');
+                const estudosConcluidos = ref([]);
+
                 const sentimentosComIcone = ref([
                     { nome: 'Tédio', icone: 'fa-solid fa-face-meh' },
                     { nome: 'Ansiedade', icone: 'fa-solid fa-bolt' },
@@ -339,21 +395,49 @@
                     { texto: 'Deixar o celular carregando longe do alcance das mãos ao dormir.', concluida: false }
                 ]);
 
-                const devocionais = ref([
+                // ESTUDOS ESTRUTURADOS POR MÓDULOS E MICROLEARNING
+                const estudos = ref([
                     {
-                        titulo: "1. Trazendo Tudo para a Luz",
-                        conteudo: "O vício digital e a pornografia alimentam-se do segredo. Quando expomos nossa luta à luz da verdade e da graça, as sombras perdem o domínio.",
-                        referencia: "Efésios 5:13"
+                        id: 1,
+                        categoria: 'neuro',
+                        modulo: 'Módulo 1: Neurociência & Dopamina',
+                        titulo: 'O Circuito do Vício Digital',
+                        tempoLeitura: '2 min',
+                        versiculo: 'Transformai-vos pela renovação da vossa mente.',
+                        referencia: 'Romanos 12:2',
+                        pontos: [
+                            'O Reels e a pornografia disparam picos artificiais de dopamina superiores a recompensas reais.',
+                            'Após o pico, o cérebro entra num vale de ansiedade e depressão rápida, gerando a busca por novo pico.',
+                            'A reeducação exige quebrar o hábito nos primeiros 3 segundos do impulso.'
+                        ]
                     },
                     {
-                        titulo: "2. Reeducando o Olhar",
-                        conteudo: "Proteger os olhos não é restrição cega, mas sabedoria de quem deseja preservar a pureza da mente e a comunhão com o Criador.",
-                        referencia: "Jó 31:1"
+                        id: 2,
+                        categoria: 'combate',
+                        modulo: 'Módulo 2: Blindagem Digital',
+                        titulo: 'Regra dos 3 Segundos e Barreiras Físicas',
+                        tempoLeitura: '2 min',
+                        versiculo: 'Fugi da imoralidade sexual.',
+                        referencia: '1 Coríntios 6:18',
+                        pontos: [
+                            'Gatilhos não devem ser combatidos com debate mental, mas com fuga física e visual imediata.',
+                            'Remova o telemóvel da cabeceira da cama e do banheiro: 80% dos tropeços ocorrem aí.',
+                            'Sempre que surgir um vídeo/imagem sugestivo, feche os olhos por 3s e mude de app.'
+                        ]
                     },
                     {
-                        titulo: "3. O Poder da Graça no Recomeço",
-                        conteudo: "Se houver uma queda, a graça não condena, mas levanta com mais força. Arrependa-se prontamente e continue a caminhada.",
-                        referencia: "Hebreus 4:16"
+                        id: 3,
+                        categoria: 'graca',
+                        modulo: 'Módulo 3: Graça & Restauração',
+                        titulo: 'Vencendo o Espiral da Culpa',
+                        tempoLeitura: '3 min',
+                        versiculo: 'Nenhuma condenação há para os que estão em Cristo.',
+                        referencia: 'Romanos 8:1',
+                        pontos: [
+                            'O inimigo usa o pecado para te fascinar, e a culpa para te isolar de Deus.',
+                            'A vergonha faz a pessoa se afastar de Deus; o verdadeiro arrependimento a faz correr para Ele.',
+                            'Se tropeçar, confesse imediatamente, levante-se e retome a caminhada na luz.'
+                        ]
                     }
                 ]);
 
@@ -374,6 +458,9 @@
 
                     const tarefasSalvas = localStorage.getItem('tarefasDesafio_lume');
                     if (tarefasSalvas) tarefasDesafio.value = JSON.parse(tarefasSalvas);
+
+                    const concluidosSalvos = localStorage.getItem('estudosConcluidos_lume');
+                    if (concluidosSalvos) estudosConcluidos.value = JSON.parse(concluidosSalvos);
                 });
 
                 const horasTotais = computed(() => {
@@ -385,6 +472,23 @@
 
                 const diasDeVitoria = computed(() => Math.floor(horasTotais.value / 24));
                 const horasDeVitoria = computed(() => horasTotais.value);
+
+                const estudosFiltrados = computed(() => {
+                    if (categoriaFiltro.value === 'todos') return estudos.value;
+                    return estudos.value.filter(e => e.categoria === categoriaFiltro.value);
+                });
+
+                const estudosConcluidosCount = computed(() => estudosConcluidos.value.length);
+                const percentualEstudos = computed(() => Math.round((estudosConcluidos.value.length / estudos.value.length) * 100) || 0);
+
+                const alternarConclusaoEstudo = (id) => {
+                    if (estudosConcluidos.value.includes(id)) {
+                        estudosConcluidos.value = estudosConcluidos.value.filter(eId => eId !== id);
+                    } else {
+                        estudosConcluidos.value.push(id);
+                    }
+                    localStorage.setItem('estudosConcluidos_lume', JSON.stringify(estudosConcluidos.value));
+                };
 
                 const reiniciarCaminhada = () => {
                     if (confirm("Em Cristo há perdão e restauração abundante. Deseja reiniciar sua contagem e iniciar uma nova jornada na luz?")) {
@@ -439,8 +543,9 @@
                 return {
                     abaAtiva, diasDeVitoria, horasDeVitoria, modalEmergencia, numeroMentor,
                     tempoRestante, sentimentosComIcone, ultimoGatilho, medalhas, tarefasDesafio,
-                    devocionais, reiniciarCaminhada, abrirEmergencia, fecharEmergencia,
-                    registrarGatilho, salvarTarefas, salvarMentor, chamarMentor
+                    estudos, categoriaFiltro, estudosFiltrados, estudosConcluidos, estudosConcluidosCount,
+                    percentualEstudos, alternarConclusaoEstudo, reiniciarCaminhada, abrirEmergencia,
+                    fecharEmergencia, registrarGatilho, salvarTarefas, salvarMentor, chamarMentor
                 };
             }
         }).mount('#app');
